@@ -78,41 +78,56 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 - **Expo Router**: File-based navigation system
 
 #### 3.1.2 Database
-- **SQLite**: Local database for habit and completion data
-- **expo-sqlite**: Expo's SQLite integration
+- **Convex**: Real-time database and backend platform
+- **Convex React**: React integration for Convex
 - **Database Schema**: 
-  ```sql
-  -- Users table
-  CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+  ```typescript
+  // Users table
+  export interface User {
+    _id: Id<"users">;
+    email: string;
+    name?: string;
+    avatar?: string;
+    createdAt: number;
+  }
 
-  -- Habits table
-  CREATE TABLE habits (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
-    description TEXT,
-    category TEXT,
-    frequency TEXT NOT NULL,
-    reminder_times TEXT, -- JSON array of reminder times
-    color TEXT,
-    icon TEXT,
-    goal INTEGER,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (id)
-  );
+  // Habits table
+  export interface Habit {
+    _id: Id<"habits">;
+    userId: Id<"users">;
+    name: string;
+    description?: string;
+    category: string;
+    frequency: "daily" | "weekly" | "custom";
+    reminderTimes: string[]; // Array of reminder times
+    color: string;
+    icon: string;
+    goal?: number;
+    createdAt: number;
+    updatedAt: number;
+  }
 
-  -- Completions table
-  CREATE TABLE completions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    habit_id INTEGER NOT NULL,
-    completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    notes TEXT,
-    FOREIGN KEY (habit_id) REFERENCES habits (id)
-  );
+  // Completions table
+  export interface Completion {
+    _id: Id<"completions">;
+    habitId: Id<"habits">;
+    userId: Id<"users">;
+    completedAt: number;
+    notes?: string;
+  }
+
+  // User settings table
+  export interface UserSettings {
+    _id: Id<"userSettings">;
+    userId: Id<"users">;
+    notificationPreferences: {
+      reminders: boolean;
+      streakAlerts: boolean;
+      motivationalMessages: boolean;
+    };
+    theme: "light" | "dark" | "auto";
+    timezone: string;
+  }
   ```
 
 #### 3.1.3 Notifications
@@ -123,10 +138,11 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 ### 3.2 Technical Architecture
 
 #### 3.2.1 Database Layer
-- **SQLiteProvider**: Context provider for database access
-- **Migration System**: Version-controlled database schema updates
+- **Convex Provider**: React context for Convex client access
+- **Real-time Subscriptions**: Live updates for habit data and completions
 - **Data Models**: TypeScript interfaces for type safety
-- **Repository Pattern**: Abstracted data access layer
+- **Query Functions**: Convex query functions for data retrieval
+- **Mutation Functions**: Convex mutation functions for data updates
 
 #### 3.2.2 Notification System
 - **Permission Handling**: Request and manage notification permissions
@@ -135,6 +151,7 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 - **Background Handling**: Handle notifications when app is closed
 
 #### 3.2.3 State Management
+- **Convex State**: Real-time state management through Convex
 - **React Context**: Global state for user data and app settings
 - **Local State**: Component-level state management
 - **AsyncStorage**: Persistent storage for user preferences
@@ -143,13 +160,13 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 
 #### 3.3.1 Push Notifications
 - **Expo Push Service**: Send notifications via Expo's infrastructure
-- **Server Integration**: Backend service for notification scheduling
+- **Convex Functions**: Backend functions for notification scheduling
 - **Token Management**: Secure storage and transmission of push tokens
 
 #### 3.3.2 Social Features
-- **User Authentication**: Email-based user identification
-- **Data Synchronization**: Sync habit data across devices
-- **Community API**: Leaderboards and social features
+- **Convex Auth**: Built-in authentication system
+- **Real-time Sync**: Automatic data synchronization across devices
+- **Community Features**: Leaderboards and social features using Convex
 
 ## 4. User Experience Requirements
 
@@ -180,16 +197,16 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 - **Battery Optimization**: Minimal battery impact from background processes
 
 ### 5.2 Database Performance
+- **Real-time Updates**: Instant data synchronization across devices
 - **Query Optimization**: Fast database queries for habit lists
-- **Indexing**: Proper database indexing for performance
 - **Data Pagination**: Efficient loading of large datasets
-- **Background Sync**: Non-blocking data synchronization
+- **Background Sync**: Automatic data synchronization
 
 ## 6. Security Requirements
 
 ### 6.1 Data Protection
-- **Local Storage**: Secure storage of user data
-- **Encryption**: Encrypt sensitive user information
+- **Convex Security**: Built-in security and authentication
+- **Encryption**: Automatic encryption of data in transit and at rest
 - **Token Security**: Secure handling of push notification tokens
 - **Privacy**: User control over data sharing
 
@@ -203,7 +220,7 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 
 ### 7.1 Testing Strategy
 - **Unit Tests**: Test individual components and functions
-- **Integration Tests**: Test database and notification integration
+- **Integration Tests**: Test Convex functions and notification integration
 - **E2E Tests**: Test complete user workflows
 - **Performance Tests**: Test app performance under load
 
@@ -231,7 +248,7 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 
 ### 9.1 Phase 1: Core Features (4-6 weeks)
 - Basic habit creation and management
-- Local SQLite database implementation
+- Convex database implementation
 - Simple completion tracking
 - Basic UI/UX implementation
 
@@ -242,10 +259,10 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 - Background notification processing
 
 ### 9.3 Phase 3: Social Features (3-4 weeks)
-- User authentication system
+- Convex authentication system
 - Community features implementation
 - Leaderboards and achievements
-- Data synchronization
+- Real-time data synchronization
 
 ### 9.4 Phase 4: Polish & Testing (2-3 weeks)
 - UI/UX refinements
@@ -265,7 +282,7 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 - **App Performance**: Monitor launch time and responsiveness
 - **Crash Rate**: Track application stability
 - **Battery Impact**: Monitor battery usage
-- **Storage Usage**: Track database size and efficiency
+- **Sync Performance**: Track real-time synchronization efficiency
 
 ### 10.3 Business Metrics
 - **User Retention**: 30-day and 90-day retention rates
@@ -277,7 +294,7 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 
 ### 11.1 Technical Risks
 - **Notification Reliability**: Implement fallback mechanisms
-- **Database Corruption**: Regular backups and recovery procedures
+- **Network Connectivity**: Handle offline scenarios gracefully
 - **Performance Issues**: Continuous monitoring and optimization
 - **Platform Updates**: Stay current with React Native and Expo updates
 
@@ -301,4 +318,4 @@ A comprehensive habit tracking mobile application built with React Native and Ex
 - **Wearable Integration**: Apple Watch and Android Wear support
 - **Smart Home Integration**: IoT device connectivity
 
-This specification provides a comprehensive foundation for developing a robust, user-friendly habit tracking application that leverages the full capabilities of React Native and Expo while maintaining high standards for performance, security, and user experience. 
+This specification provides a comprehensive foundation for developing a robust, user-friendly habit tracking application that leverages the full capabilities of React Native, Expo, and Convex while maintaining high standards for performance, security, and user experience. 

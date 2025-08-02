@@ -2,12 +2,17 @@
 
 # dependencies
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
+.expo-shared/
 
 # Native
 .kotlin/
@@ -17,6 +22,7 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.keystore
 
 # Metro
 .metro-health-check*
@@ -32,8 +38,169 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
+.env.production
+.env.development
+.env.staging
 
 # typescript
 *.tsbuildinfo
 
-app-example
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Build and distribution
+build/
+dist/
+*.tgz
+*.tar.gz
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# Convex
+.convex/
+
+# Temporary folders
+tmp/
+temp/
+
+# App example folder (created by reset script)
+app-example/
+
+# EAS Build
+.easignore
+
+# Local development
+.local/
+
+# Test files
+*.test.js.snap
+*.test.ts.snap
+
+# Storybook build outputs
+storybook-static/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
+
+# Lock files (keep package-lock.json and pnpm-lock.yaml)
+# yarn.lock (if using yarn)
+# npm-shrinkwrap.json
+
+# Local configuration files
+.eslintrc.local
+.prettierrc.local
+.babelrc.local
+
+# Sentry
+.sentryclirc
+
+# Flipper
+ios/Pods/
+android/.gradle/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Bundle artifacts
+*.jsbundle
+
+# CocoaPods
+ios/Pods/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+# Testing
+coverage/
+*.lcov
+
+# Production
+build/
+dist/
+
+# Misc
+*.tgz
+*.tar.gz
